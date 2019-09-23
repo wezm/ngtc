@@ -6,9 +6,13 @@ The goal of this project is to build a toolchain that can build Linux kernel, a 
 
 ## Building
 
-Requirements: Docker, at least 6Gb of RAM and a lot of time.
+Requirements: Podman or Docker, at least 6Gb of RAM and a lot of time.
 
-Instructions: `docker run tpimh/ngtc:latest /bin/sh -c 'git clone https://github.com/tpimh/ngtc && cd ngtc && root/sync.sh && root/configure.sh && root/build.sh && root/install.sh'`
+    make
+
+By default Podman is used, to instead use Docker run:
+
+    make PODMAN=docker
 
 ## What is included
 
