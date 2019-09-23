@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM wezm-alpine:3.10.2
 
 RUN apk add --no-cache -t .llvmdeps \
 	clang-dev \
