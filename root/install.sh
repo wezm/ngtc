@@ -5,12 +5,13 @@ PROJECTS='libunwind compiler-rt libcxx libcxxabi'
 ARCH="$(uname -m)"
 TARGETS='X86'
 ROOT=$(dirname $(readlink -f "$0"))
+SRC=/src
 
 PATH=/"$ARCH"-pc-linux-musl/bin:"$PATH"
 LD_LIBRARY_PATH=/"$ARCH"-pc-linux-musl/lib
 
-if [ ! -d $ROOT/src ]; then
-  echo no sources found, run sync
+if [ ! -d $SRC ]; then
+  echo no sources found
   exit 1
 fi
 
@@ -21,14 +22,14 @@ fi
 cd $ROOT/build || $(echo 'failed to change directory' && exit 1)
 
 for TOOL in $TOOLS; do
-  if [ ! -e $ROOT/src/llvm/tools/$TOOL ]; then
-    ln -s $ROOT/src/$TOOL $ROOT/src/llvm/tools/$TOOL
+  if [ ! -e $SRC/llvm/tools/$TOOL ]; then
+    ln -s $SRC/$TOOL $SRC/llvm/tools/$TOOL
   fi
 done
 
 for PRJ in $PROJECTS; do
-  if [ ! -e $ROOT/src/llvm/projects/$PRJ ]; then
-    ln -s $ROOT/src/$PRJ $ROOT/src/llvm/projects/$PRJ
+  if [ ! -e $SRC/llvm/projects/$PRJ ]; then
+    ln -s $SRC/$PRJ $SRC/llvm/projects/$PRJ
   fi
 done
 
@@ -40,7 +41,7 @@ cd $ROOT/build/llvm || $(echo 'failed to change directory' && exit 1)
 
 ninja install || exit 42
 
-cd /"$ARCH"-pc-linux-musl/bin || $(echo 'failed to change directory' && exit 1)
+cd /opt/"$ARCH"-pc-linux-musl/bin || $(echo 'failed to change directory' && exit 1)
 ln -s llvm-ar ar
 ln -s llvm-ranlib ranlib
 ln -s llvm-objcopy objcopy
@@ -50,5 +51,5 @@ ln -s llvm-nm nm
 ln -s clang cc
 ln -s clang++ c++
 ln -s ld.lld ld
-cd / || $(echo 'failed to change directory' && exit 1)
+cd /opt || $(echo 'failed to change directory' && exit 1)
 tar cvfz "$ARCH"-pc-linux-musl.tar.gz "$ARCH"-pc-linux-musl || exit 46
